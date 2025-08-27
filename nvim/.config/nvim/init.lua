@@ -219,6 +219,16 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   end,
 })
 
+-- Change working directory to the directory being opened
+vim.api.nvim_create_autocmd('VimEnter', {
+  callback = function()
+    local arg = vim.fn.argv(0)
+    if arg and vim.fn.isdirectory(arg) == 1 then
+      vim.cmd('cd ' .. vim.fn.fnameescape(arg))
+    end
+  end,
+})
+
 -- [[ Install `lazy.nvim` plugin manager ]]
 --    See `:help lazy.nvim.txt` or https://github.com/folke/lazy.nvim for more info
 local lazypath = vim.fn.stdpath 'data' .. '/lazy/lazy.nvim'
