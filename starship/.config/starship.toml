@@ -9,22 +9,17 @@ $directory\
 [](bg:yellow fg:peach)\
 $git_branch\
 $git_status\
-[](fg:yellow bg:green)\
-$c\
-$rust\
-$golang\
-$nodejs\
-$php\
-$java\
-$kotlin\
-$haskell\
-$python\
-[](fg:green bg:sapphire)\
-$conda\
-[ ](fg:lavender)\
+[](fg:yellow)\
+$fill\
+[](fg:sapphire)\
 $cmd_duration\
+[](bg:lavender fg:sapphire)\
+$conda\
+$docker_context\
+$singularity\
+[ ](fg:lavender)\
 $line_break\
-\n$character"""
+$character"""
 
 palette = 'catppuccin_mocha'
 
@@ -60,6 +55,9 @@ format = '[[ $symbol $branch ](fg:crust bg:yellow)]($style)'
 [git_status]
 style = "bg:yellow"
 format = '[[($all_status$ahead_behind )](fg:crust bg:yellow)]($style)'
+
+[fill]
+symbol = ' '
 
 [nodejs]
 symbol = ""
@@ -108,12 +106,17 @@ format = '[[ $symbol( $version)(\(#$virtualenv\)) ](fg:crust bg:green)]($style)'
 
 [docker_context]
 symbol = ""
-style = "bg:sapphire"
-format = '[[ $symbol( $context) ](fg:crust bg:sapphire)]($style)'
+style = "bg:lavender"
+format = '[[ $symbol( $context) ](fg:crust bg:lavender)]($style)'
+
+[singularity]
+symbol = "📦"
+style = "bg:lavender"
+format = '[[ $symbol( $env) ](fg: crust bg: lavender)]($style)'
 
 [conda]
 symbol = "  "
-style = "fg:crust bg:sapphire"
+style = "fg:crust bg:lavender"
 format = '[$symbol$environment ]($style)'
 ignore_base = false
 
@@ -124,7 +127,7 @@ style = "bg:lavender"
 format = '[[  $time ](fg:crust bg:lavender)]($style)'
 
 [line_break]
-disabled = true
+disabled = false
 
 [character]
 disabled = false
@@ -136,9 +139,9 @@ vimcmd_replace_symbol = '[❮](bold fg:lavender)'
 vimcmd_visual_symbol = '[❮](bold fg:yellow)'
 
 [cmd_duration]
-show_milliseconds = true
-format = " in $duration "
-style = "bg:lavender"
+show_milliseconds = false
+style = "fg:crust bg:sapphire"
+format = '[[ 󱎫 $duration ](fg:crust bg:sapphire)]($style)'
 disabled = false
 show_notifications = true
 min_time_to_notify = 45000
