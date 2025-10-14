@@ -694,6 +694,23 @@ require('lazy').setup({
         -- ts_ls = {},
         --
 
+        jsonls = {
+          -- JSON language server settings
+          settings = {
+            json = {
+              format = { enable = true },
+              validate = { enable = true },
+              schemas = {
+                -- You can define specific schemas here or let it fetch from the schema store
+                {
+                  fileMatch = { "package.json" },
+                  url = "https://json.schemastore.org/package",
+                },
+              },
+            },
+          },
+        },
+
         lua_ls = {
           -- cmd = { ... },
           -- filetypes = { ... },
