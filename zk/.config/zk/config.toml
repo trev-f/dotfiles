@@ -79,6 +79,10 @@ template = "default.md"
 #[group."<NAME>".extra]
 #key = "value"
 
+# make group for code snippets
+[group.snippets]
+paths = []
+
 
 # MARKDOWN SETTINGS
 [format.markdown]
@@ -169,6 +173,12 @@ dead-link = "error"
 #     * you can pipe commands together with the usual | character
 #
 [alias]
+# interactive edit by default
+edit = 'zk edit --interactive "$@"'
+
+# make managing code snippets easy
+snip = 'zk edit snippets --interactive "$@"'
+
 # Here are a few aliases to get you started.
 
 # Shortcut to a command.
