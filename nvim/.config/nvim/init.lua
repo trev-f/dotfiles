@@ -1,4 +1,5 @@
 --[[
+--
 
 =====================================================================
 ==================== READ THIS BEFORE CONTINUING ====================
@@ -296,6 +297,43 @@ require('lazy').setup({
         "prompt",
       },
     },
+  },
+
+  {
+    'windwp/nvim-autopairs',
+    event = 'InsertEnter',
+    config = function()
+      local npairs = require('nvim-autopairs')
+      npairs.setup({
+        check_ts = true, -- use treesitter to check for pairs
+        ts_config = {
+          lua = { 'string' }, -- don't add pairs in lue string treesitter mode
+          javascript = { 'template_string' },
+          java = false, -- don't check treesitter on java
+        },
+        disable_filetype = { 'TelescopePrompt', 'vim' },
+        fast_wrap = {
+          map = '<M-e>',
+          chars = { '{', '[', '(', '"', "'" },
+          pattern = [=[[%'%"%>%]%)%}%,]]=],
+          end_key = '$',
+          keys = 'qwertyuiopzxcvbnmasdfghjkl',
+          check_comma = true,
+          highlight = 'Search',
+          high_grey = 'Comment',
+        },
+      })
+
+      -- Integration with blink.cmp
+      local cmp_autopairs = require('nvim-autopairs.completion.cmp')
+      local cmp = require('blink.cmp')
+
+      -- make autopairs work with completion
+      cmp.on_confirm = function(entry)
+        cmp_autopairs.on_confirm_done()(entry)
+      end
+    end,
+    dependencies = { 'saghen/blink.cmp' },
   },
 
   -- NOTE: Plugins can also be added by using a table,
