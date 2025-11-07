@@ -717,6 +717,7 @@ require('lazy').setup({
         -- ts_ls = {},
         --
 
+        -- JSON support
         jsonls = {
           -- JSON language server settings
           settings = {
@@ -748,6 +749,9 @@ require('lazy').setup({
             },
           },
         },
+
+        -- Markdown LSP for .qmd files
+        marksman = {},
       }
 
       -- Ensure the servers and tools above are installed
@@ -766,6 +770,7 @@ require('lazy').setup({
       local ensure_installed = vim.tbl_keys(servers or {})
       vim.list_extend(ensure_installed, {
         'stylua', -- Used to format Lua code
+        'marksman', -- Markdown/Quarto LSP
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
@@ -784,6 +789,31 @@ require('lazy').setup({
         },
       }
     end,
+  },
+
+  -- Quarto support
+  {
+    'quarto-dev/quarto-nvim',
+    dependencies = {
+      'jmbuhr/otter.nvim',
+    },
+    ft = { 'quarto', 'qmd' },
+    opts = {
+      lspFeatures = {
+        enabled = true,
+        languages = { 'r', 'python', 'julia', 'bash', 'html' },
+        diagnostics = {
+          enabled = true,
+          triggers = { 'BufWritePost' },
+        },
+        completion = {
+          enabled = true,
+        },
+      },
+      codeRunner = {
+        enabled = false,
+      },
+    },
   },
 
   { -- Autoformat
