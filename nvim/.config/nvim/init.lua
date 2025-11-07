@@ -299,43 +299,6 @@ require('lazy').setup({
     },
   },
 
-  {
-    'windwp/nvim-autopairs',
-    event = 'InsertEnter',
-    config = function()
-      local npairs = require('nvim-autopairs')
-      npairs.setup({
-        check_ts = true, -- use treesitter to check for pairs
-        ts_config = {
-          lua = { 'string' }, -- don't add pairs in lue string treesitter mode
-          javascript = { 'template_string' },
-          java = false, -- don't check treesitter on java
-        },
-        disable_filetype = { 'TelescopePrompt', 'vim' },
-        fast_wrap = {
-          map = '<M-e>',
-          chars = { '{', '[', '(', '"', "'" },
-          pattern = [=[[%'%"%>%]%)%}%,]]=],
-          end_key = '$',
-          keys = 'qwertyuiopzxcvbnmasdfghjkl',
-          check_comma = true,
-          highlight = 'Search',
-          high_grey = 'Comment',
-        },
-      })
-
-      -- Integration with blink.cmp
-      local cmp_autopairs = require('nvim-autopairs.completion.cmp')
-      local cmp = require('blink.cmp')
-
-      -- make autopairs work with completion
-      cmp.on_confirm = function(entry)
-        cmp_autopairs.on_confirm_done()(entry)
-      end
-    end,
-    dependencies = { 'saghen/blink.cmp' },
-  },
-
   -- NOTE: Plugins can also be added by using a table,
   -- with the first argument being the link and the following
   -- keys can be used to configure plugin behavior/loading/etc.
@@ -1003,11 +966,39 @@ require('lazy').setup({
       -- the rust implementation via `'prefer_rust_with_warning'`
       --
       -- See :h blink-cmp-config-fuzzy for more information
-      fuzzy = { implementation = 'lua' },
+      fuzzy = { implementation = 'prefer_rust_with_warning' },
 
       -- Shows a signature help window while you type arguments for a function
       signature = { enabled = true },
     },
+  },
+
+  { -- auto close parentheses, brackets, quotes, etc.
+    'windwp/nvim-autopairs',
+    event = 'InsertEnter',
+    config = function()
+      local npairs = require('nvim-autopairs')
+      npairs.setup({
+        check_ts = true, -- use treesitter to check for pairs
+        ts_config = {
+          lua = { 'string' }, -- don't add pairs in lue string treesitter mode
+          javascript = { 'template_string' },
+          java = false, -- don't check treesitter on java
+        },
+        disable_filetype = { 'TelescopePrompt', 'vim' },
+        fast_wrap = {
+          map = '<M-e>',
+          chars = { '{', '[', '(', '"', "'" },
+          pattern = [=[[%'%"%>%]%)%}%,]]=],
+          end_key = '$',
+          keys = 'qwertyuiopzxcvbnmasdfghjkl',
+          check_comma = true,
+          highlight = 'Search',
+          high_grey = 'Comment',
+        },
+      })
+    end,
+    dependencies = { 'saghen/blink.cmp' },
   },
 
   { -- You can easily change to a different colorscheme.
