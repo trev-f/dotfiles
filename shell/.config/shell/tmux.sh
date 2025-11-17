@@ -14,17 +14,43 @@ tm() {
         return
     fi
     
+    # Check if any sessions exist
+    if ! tmux list-sessions &>/dev/null; then
+        # No sessions exist - prompt to create one
+        echo "No tmux sessions found."
+        read -p "Enter name for new session (or press Enter for 'default'): " session_name
+        session_name=${session_name:-default}
+        
+        if [[ -n "$TMUX" ]]; then
+            tmux new-session -d -s "$session_name" && tmux switch-client -t "$session_name"
+        else
+            tmux new-session -s "$session_name"
+        fi
+        return
+    fi
+    
     # Interactive session picker with fzf
     if command -v fzf &> /dev/null; then
         session=$(tmux list-sessions -F "#{session_name}" 2>/dev/null | \
             fzf --height=40% --reverse --border --prompt="Select session: " \
                 --preview="tmux list-windows -t {} -F '#{window_index}: #{window_name}'" \
-                --exit-0) && \
-            tmux $change -t "$session" || echo "No sessions found."
+                --exit-0)
+        
+        if [ -n "$session" ]; then
+            tmux $change -t "$session"
+        else
+            # User cancelled fzf - offer to create new session
+            echo ""
+            read -p "Create new session? Enter name (or press Enter to cancel): " session_name
+            if [ -n "$session_name" ]; then
+                tmux $change -t "$session_name" 2>/dev/null || \
+                    (tmux new-session -d -s "$session_name" && tmux $change -t "$session_name")
+            fi
+        fi
     else
         # Fallback if fzf not available
         echo "Available sessions:"
-        tmux list-sessions 2>/dev/null || echo "No sessions found."
+        tmux list-sessions
     fi
 }
 
