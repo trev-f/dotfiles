@@ -179,6 +179,9 @@ edit = 'zk edit --interactive "$@"'
 # make managing code snippets easy
 snip = 'zk edit snippets --interactive "$@"'
 
+# provide quick access to cheatsheets
+cheat = 'zk edit --interactive --tag cheatsheet'
+
 # Here are a few aliases to get you started.
 
 # Shortcut to a command.
