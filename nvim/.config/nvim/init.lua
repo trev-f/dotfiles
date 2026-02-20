@@ -839,14 +839,14 @@ require('lazy').setup({
               vim.fn.expand('~/.local/share/nvim/language-servers/language-server-all.jar')
             },
             filetypes = { 'nextflow', 'nf' },
-            rootdir = function(fname)
+            root_dir = function(fname)
               return lspconfig.util.root_pattern('nextflow.config', '.git')(fname)
                 or vim.fn.getcwd()
             end,
             settings = {
               nextflow = {
                 files = {
-                  exlucde = { '.git', '.nf-test', 'work' }
+                  exclude = { '.git', '.nf-test', 'work' }
                 }
               }
             },
