@@ -732,7 +732,11 @@ require('lazy').setup({
         --
         -- But for many setups, the LSP (`ts_ls`) will work just fine
         -- ts_ls = {},
-        --
+
+        -- Bash/Shell script support
+        bashls = {
+          filetypes = { 'sh', 'bash' },
+        },
 
         -- JSON support
         jsonls = {
@@ -805,6 +809,53 @@ require('lazy').setup({
           end,
         },
       }
+
+      -- Manual Nextflow language server setup (it's not available in Mason)
+      -- PREREQUISITES:
+      --   1. Install Java v17+
+      --   2. Install Nextflow and make available on the PATH
+      --   3. Download Nextflow language server jar file from nextflow-io/language-server releases (https://github.com/nextflow-io/language-server/releases) into ~/.local/share/nvim/language-servers
+      local lspconfig = require('lspconfig')
+      local configs = require('lspconfig.configs')
+
+      if not configs.nextflow_ls then
+        configs.nextflow_ls = {
+          default_config = {
+            cmd = {
+              'java',
+              '-jar',
+              vim.fn.expand('~/.local/share/nvim/language-servers/language-server-all.jar')
+            },
+            filetypes = { 'nextflow', 'nf' },
+            rootdir = function(fname)
+              return lspconfig.util.root_pattern('nextflow.config', '.git')(fname)
+                or vim.fn.getcwd()
+            end,
+            settings = {
+              nextflow = {
+                files = {
+                  exlucde = { '.git', '.nf-test', 'work' }
+                }
+              }
+            },
+          },
+        }
+      end
+
+      lspconfig.nextflow_ls.setup({
+        capabilities = capabilities,
+      })
+
+      -- Ensure Nextflow files are recognized
+      vim.filetype.add({
+        extension = {
+          nf = 'nextflow',
+        },
+        patern = {
+          ['.*%.nf'] = 'nextflow',
+          ['nextflow%.config'] = 'groovy',
+        },
+      })
     end,
   },
 
@@ -1086,6 +1137,10 @@ require('lazy').setup({
     --    - Show your current context: https://github.com/nvim-treesitter/nvim-treesitter-context
     --    - Treesitter + textobjects: https://github.com/nvim-treesitter/nvim-treesitter-textobjects
   },
+  { -- Nextflow syntax highlighting
+    "nextflow-io/vim-language-nextflow",
+    ft = { "nextflow", "nf" }
+  }
 
   -- The following comments only work if you have downloaded the kickstart repo, not just copy pasted the
   -- init.lua. If you want these files, they are in the repository, so you can just download them and
