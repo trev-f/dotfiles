@@ -773,6 +773,18 @@ require('lazy').setup({
 
         -- Markdown LSP for .qmd files
         marksman = {},
+
+        -- basedpyright for Python
+        basedpyright = {
+          settings = {
+            basedpyright = {
+              analysis = {
+                typeCheckingMode = "standard", -- "basic", "strict", or "all"
+                useLibraryCodeForTypes = true,
+              },
+            },
+          },
+        },
       }
 
       -- Ensure the servers and tools above are installed
@@ -998,7 +1010,7 @@ require('lazy').setup({
       completion = {
         -- By default, you may press `<c-space>` to show the documentation.
         -- Optionally, set `auto_show = true` to show the documentation after a delay.
-        documentation = { auto_show = false, auto_show_delay_ms = 500 },
+        documentation = { auto_show = false, auto_show_delay_ms = 200 },
       },
 
       sources = {
