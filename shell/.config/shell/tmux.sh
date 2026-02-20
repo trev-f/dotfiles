@@ -85,6 +85,6 @@ tmk() {
 
 # Useful aliases
 alias tl='tmux list-sessions'
-alias ta='tmux attach -t'
+alias ta='tmux attach'
 alias tn='tmux new -s'
 
