@@ -253,6 +253,17 @@ vim.api.nvim_create_autocmd('VimEnter', {
   end,
 })
 
+-- Filetype detection (must run before plugins load)
+vim.filetype.add({
+  extension = {
+    nf = 'nextflow',
+  },
+  pattern = {
+    ['.*%.nf'] = 'nextflow',
+    ['nextflow%.config'] = 'groovy',
+  },
+})
+
 -- [[ Install `lazy.nvim` plugin manager ]]
 --    See `:help lazy.nvim.txt` or https://github.com/folke/lazy.nvim for more info
 local lazypath = vim.fn.stdpath 'data' .. '/lazy/lazy.nvim'
@@ -856,17 +867,6 @@ require('lazy').setup({
 
       lspconfig.nextflow_ls.setup({
         capabilities = capabilities,
-      })
-
-      -- Ensure Nextflow files are recognized
-      vim.filetype.add({
-        extension = {
-          nf = 'nextflow',
-        },
-        patern = {
-          ['.*%.nf'] = 'nextflow',
-          ['nextflow%.config'] = 'groovy',
-        },
       })
     end,
   },
